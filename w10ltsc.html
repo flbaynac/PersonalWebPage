@@ -29,6 +29,11 @@
       <li><a href="https://www.mediafire.com/file/pmoyqvb6u94xqby/skus-Windows-10.zip/file">Windows Enterprise SKUs</a></li>
     <li><a href="https://officecdn.microsoft.com/db/492350f6-3a01-4f97-b9c0-c7c6ddf67d60/media/en-us/ProPlus2021Retail.img">Office Pro Plus 2021</a></li>
     </ul>
+    > Copy SKUs to C:\Windows\System32\spp\tokens\skus
+    <br>
+    > Go to C:\Program Files\Microsoft Office\Office16 or C:\Program Files (x86)\Microsoft Office\Office16
+    <br>
+    > Open CMD as Admin and run the commands below:
     <pre class="cmd">
 slmgr /rilc
 slmgr /upk >nul 2>&1
@@ -48,7 +53,6 @@ slmgr /ipk M7XTQ-FN8P6-TTKYV-9D4CC-J462D
 slmgr /skms kms8.msguides.com
 slmgr /ato
 slmgr /skms localhost
-cd C:\Program Files\Microsoft Office\Office16
 for /f %x in ('dir /b ..\root\Licenses16\ProPlus2021VL_KMS*.xrm-ms') do cscript ospp.vbs /inslic:"..\root\Licenses16\%x"
 cscript ospp.vbs /setprt:1688
 cscript ospp.vbs /unpkey:6F7TH >nul
