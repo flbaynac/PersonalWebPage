@@ -1,0 +1,32 @@
+html {
+  height: 100%;
+  width: 100%;
+  background-color: black;
+  font-family: Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New, monospace;
+  color: white;
+}
+
+pre.bash {
+  color: lightgreen;
+  font-size: smaller; 
+  display: inline-block;
+}
+
+@media (max-width: 1000px) {
+  pre.bash {
+    font-size: 4px;
+  }
+}
+
+a {
+  color: yellow;
+  text-decoration: none;
+}
+
+.datos-personales {
+  padding: 20px;
+}
+
+.links {
+  padding: 30px;
+}
