@@ -7,8 +7,14 @@ html {
 }
 
 pre.bash {
-  color: lightgreen;
+  color: greenyellow;
   font-size: smaller; 
+  display: inline-block;
+}
+
+pre.cmd {
+  color: greenyellow;
+  font-size: large; 
   display: inline-block;
 }
 
@@ -29,4 +35,8 @@ a {
 
 .links {
   padding: 30px;
+}
+
+footer {
+  font-size: 13px;
 }
