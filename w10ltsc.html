@@ -33,8 +33,9 @@
     <br>
     > Go to C:\Program Files\Microsoft Office\Office16 or C:\Program Files (x86)\Microsoft Office\Office16
     <br>
-    > Open CMD as Admin and run the commands below:
+    > Open CMD as Admin and run the commands below one by one:
     <pre class="cmd">
+echo
 slmgr /rilc
 slmgr /upk >nul 2>&1
 slmgr /ckms >nul 2>&1
@@ -43,10 +44,8 @@ slmgr /ipk M7XTQ-FN8P6-TTKYV-9D4CC-J462D
 sc config LicenseManager start= auto & net start LicenseManager
 sc config wuauserv start= auto & net start wuauserv
 clipup -v -o -altto c:\
-echo
 slmgr /upk
 slmgr /cpky
-slmgr /ckms
 slmgr /ckms
 slmgr /skms localhost
 slmgr /ipk M7XTQ-FN8P6-TTKYV-9D4CC-J462D
@@ -59,6 +58,7 @@ cscript ospp.vbs /unpkey:6F7TH >nul
 cscript ospp.vbs /inpkey:FXYTK-NJJ8C-GB6DW-3DYQT-6F7TH
 cscript ospp.vbs /sethst:e8.us.to
 cscript ospp.vbs /act
+
     </pre>
   </div>
 </body>
