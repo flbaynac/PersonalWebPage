@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width">
-    <title>Windows 10 LTSC</title>
+    <title>Windows Toolset</title>
     <link href="style.css" rel="stylesheet" type="text/css" />
     <link rel="icon" type="image/x-icon" href="favicon-32x32.png">
   </head>
@@ -23,11 +23,7 @@
   <a href="index.html">BACK</a>
   <div class="links">
     <ul>
-     <li><a href="https://www.bleachbit.org/download/file/t?file=BleachBit-4.4.2-portable.zip">Bleachbit</a> (cleaner tool)</li>
     <li><a href="https://github.com/hardentools/hardentools/releases/tag/v2.5">HardenTools</a> (Enforce Windows security)</li>
-<li>
-  <a href="https://privacy.sexy/">Privacy.sexy</a> (script for privacy and disable windows default settings)
-</li>
 <li>
   <a href="https://github.com/ChrisTitusTech/winutil">CTT WinUtils</a> (Run PowerShell as Admin)
 <br>
@@ -44,9 +40,6 @@ irm get.scoop.sh | iex
 </pre>
   </li>
   <li>
-    <a href="https://github.com/microsoft/PowerToys/releases/tag/v0.74.1">PowerToys</a> (Extend windows functionality)
-  </li>
-  <li>
     <a href="https://www.idrive.com/es/online-backup-download">Idrive</a> (Backup Tool)
   </li>
   <li>
@@ -61,16 +54,22 @@ irm get.scoop.sh | iex
       <li><a href="https://chrome.google.com/webstore/detail/bookmark-backup/eocfcfklbhdgkilphhkcpcgaollminlf">Bookmark Backup</a></li>
       <li><a href="https://chrome.google.com/webstore/detail/dark-reader/eimadpbcbfnmbkopoojfekhnkhdbieeh">Dark Reader</a></li>
       <li><a href="https://chrome.google.com/webstore/detail/bitwarden-free-password-m/nngceckbapebfimnlniiiahkandclblb">Bitwarden</a></li>
-      <li>
-        Enable HTTPS Edge:
-        <ul>
-          <li>Visit edge://flags/#edge-automatic-https and enable Automatic HTTPS</li>
-          <li>Hit the “Restart” button that appears to restart Microsoft Edge.</li>
-          <li>Visit edge://settings/privacy, scroll down, and turn on “Automatically switch to more secure connections with Automatic HTTPS”.</li>
-        </ul>
-      </li>
     </ul>
   </li>
+<li>
+  Programs I use:
+  <br>
+  <pre class="cmd">
+winget install --id=7zip.7zip -e  ; winget install --id=Ablaze.Floorp -e  ; winget install --id=EpicGames.EpicGamesLauncher -e  ; winget install --id=Valve.Steam -e  ; winget install --id=ElectronicArts.EADesktop -e  ; winget install --id=Playnite.Playnite -e  ; winget install --id=GlassWire.GlassWire -e  ; winget install --id=OBSProject.OBSStudio -e  ; winget install --id=Obsidian.Obsidian -e  ; winget install --id=VSCodium.VSCodium -e  ; winget install --id=JanDeDobbeleer.OhMyPosh -e  ; winget install --id=TechPowerUp.NVCleanstall -e 
+  </pre>
+</li>
+<li>
+  Enable Bluit-In Administrator:
+  <br>
+  <pre class="cmd">
+net user administrator /active:yes
+  </pre>
+</li>
 <li>
   Enable classic Windows Image Viewer (make a .reg file with this:)
 <br>
