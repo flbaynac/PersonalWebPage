@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Marcadores</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d27;
+      --surface-hover: #22263a;
+      --border: #2a2e40;
+      --accent: #5b8dee;
+      --accent-glow: rgba(91,141,238,0.15);
+      --text: #e2e4ed;
+      --text-muted: #6b7280;
+      --tag-bg: #1e2235;
+      --tag-text: #8b9fc4;
+      --danger: #ef4444;
+      --danger-bg: rgba(239,68,68,0.12);
+      --success: #22c55e;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      min-height: 100vh;
+      padding: 2rem 1rem 5rem;
+    }
+
+    /* ── Header ── */
+    header {
+      max-width: 860px;
+      margin: 0 auto 2rem;
+    }
+
+    .header-top {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      margin-bottom: 1.25rem;
+    }
+
+    header h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+    }
+
+    #add-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.5rem 1rem;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.15s, transform 0.15s;
+      white-space: nowrap;
+    }
+    #add-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+
+    /* ── Search ── */
+    .search-wrapper {
+      position: relative;
+      max-width: 520px;
+      margin: 0 auto;
+    }
+    .search-wrapper .icon-search {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      pointer-events: none;
+    }
+    #search {
+      width: 100%;
+      padding: 0.75rem 1rem 0.75rem 2.75rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text);
+      font-size: 1rem;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    #search::placeholder { color: var(--text-muted); }
+    #search:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
+
+    #count {
+      margin-top: 0.5rem;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      text-align: center;
+      min-height: 1.2em;
+    }
+
+    /* ── Toolbar ── */
+    .toolbar {
+      max-width: 860px;
+      margin: 0 auto 1rem;
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.5rem;
+    }
+    .btn-sm {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      padding: 0.35rem 0.75rem;
+      font-size: 0.75rem;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text-muted);
+      cursor: pointer;
+      font-family: inherit;
+      font-weight: 500;
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
+      text-decoration: none;
+    }
+    .btn-sm:hover { background: var(--surface-hover); color: var(--text); border-color: var(--accent); }
+
+    /* ── Grid ── */
+    #grid {
+      max-width: 860px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 1rem;
+    }
+
+    /* ── Card ── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1rem 1.1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      transition: background 0.15s, border-color 0.15s, transform 0.15s;
+      position: relative;
+    }
+    .card:hover { background: var(--surface-hover); border-color: var(--accent); transform: translateY(-2px); }
+
+    .card-link {
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .card-top {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      padding-right: 3.2rem; /* space for action buttons */
+    }
+    .favicon {
+      width: 18px;
+      height: 18px;
+      border-radius: 3px;
+      flex-shrink: 0;
+      background: var(--border);
+    }
+    .card-title {
+      font-size: 0.92rem;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .card-desc {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      line-height: 1.45;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .card-url {
+      font-size: 0.72rem;
+      color: var(--accent);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-top: 0.15rem;
+    }
+    .tags { display: flex; flex-wrap: wrap; gap: 0.3rem; margin-top: 0.2rem; }
+    .tag {
+      background: var(--tag-bg);
+      color: var(--tag-text);
+      font-size: 0.68rem;
+      padding: 0.15rem 0.45rem;
+      border-radius: 4px;
+      font-weight: 500;
+    }
+
+    /* ── Card action buttons ── */
+    .card-actions {
+      position: absolute;
+      top: 0.6rem;
+      right: 0.6rem;
+      display: flex;
+      gap: 0.25rem;
+      opacity: 0;
+      transition: opacity 0.15s;
+    }
+    .card:hover .card-actions { opacity: 1; }
+
+    .card-btn {
+      width: 26px;
+      height: 26px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      background: var(--surface);
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
+      padding: 0;
+    }
+    .card-btn:hover { background: var(--surface-hover); color: var(--text); border-color: var(--accent); }
+    .card-btn.del:hover { border-color: var(--danger); color: var(--danger); background: var(--danger-bg); }
+
+    /* ── Empty state ── */
+    #empty {
+      max-width: 860px;
+      margin: 4rem auto;
+      text-align: center;
+      color: var(--text-muted);
+      display: none;
+    }
+    #empty svg { margin-bottom: 0.75rem; opacity: 0.35; }
+    #empty p { font-size: 0.9rem; }
+
+    /* ── Overlay ── */
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.65);
+      backdrop-filter: blur(4px);
+      z-index: 100;
+    }
+    .hidden { display: none !important; }
+
+    /* ── Modal ── */
+    .modal {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 200;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.5rem;
+      width: min(480px, calc(100vw - 2rem));
+      box-shadow: 0 30px 60px rgba(0,0,0,0.6);
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.25rem;
+    }
+    .modal-header h2 { font-size: 1.05rem; font-weight: 700; }
+
+    .modal-close {
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background 0.15s, color 0.15s;
+    }
+    .modal-close:hover { background: var(--surface-hover); color: var(--text); }
+
+    .form-group { margin-bottom: 0.9rem; }
+    .form-group label {
+      display: block;
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.3rem;
+    }
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 0.65rem 0.9rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-size: 0.9rem;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      resize: vertical;
+    }
+    .form-group textarea { min-height: 68px; }
+    .form-group input::placeholder,
+    .form-group textarea::placeholder { color: var(--text-muted); }
+    .form-group input:focus,
+    .form-group textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
+
+    .field-hint { font-size: 0.72rem; color: var(--text-muted); margin-top: 0.3rem; }
+
+    .modal-actions {
+      display: flex;
+      gap: 0.75rem;
+      justify-content: flex-end;
+      margin-top: 1.25rem;
+    }
+    .btn {
+      padding: 0.6rem 1.25rem;
+      border-radius: 8px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      font-family: inherit;
+      transition: opacity 0.15s, transform 0.15s;
+    }
+    .btn:hover { opacity: 0.88; transform: translateY(-1px); }
+    .btn-secondary { background: var(--surface-hover); color: var(--text-muted); border: 1px solid var(--border); }
+    .btn-primary { background: var(--accent); color: #fff; }
+
+    /* ── Toast ── */
+    #toast {
+      position: fixed;
+      bottom: 1.5rem;
+      left: 50%;
+      transform: translateX(-50%) translateY(6px);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.6rem 1.1rem;
+      font-size: 0.85rem;
+      color: var(--text);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+      opacity: 0;
+      transition: opacity 0.2s, transform 0.2s;
+      z-index: 999;
+      white-space: nowrap;
+    }
+    #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-top">
+    <h1>Marcadores</h1>
+    <button id="add-btn">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+      Agregar
+    </button>
+  </div>
+  <div class="search-wrapper">
+    <svg class="icon-search" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+      <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+    </svg>
+    <input id="search" type="search" placeholder="Buscar marcadores… (tecla /)" autocomplete="off" />
+  </div>
+  <div id="count"></div>
+</header>
+
+<div class="toolbar">
+  <button class="btn-sm" id="export-btn">
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+    Exportar
+  </button>
+  <label class="btn-sm" for="import-file">
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+    Importar
+  </label>
+  <input type="file" id="import-file" accept=".json" style="display:none" />
+</div>
+
+<main id="grid"></main>
+
+<div id="empty">
+  <svg width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+    <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+  </svg>
+  <p id="empty-msg">No hay marcadores todavía.<br>Usa el botón <strong>Agregar</strong> para empezar.</p>
+</div>
+
+<!-- Overlay -->
+<div id="overlay" class="overlay hidden"></div>
+
+<!-- Modal -->
+<div id="modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+  <div class="modal-header">
+    <h2 id="modal-title">Agregar marcador</h2>
+    <button class="modal-close" id="modal-close" aria-label="Cerrar">✕</button>
+  </div>
+  <form id="bookmark-form" novalidate>
+    <div class="form-group">
+      <label for="f-url">URL *</label>
+      <input id="f-url" type="url" placeholder="https://ejemplo.com" autocomplete="off" spellcheck="false" />
+    </div>
+    <div class="form-group">
+      <label for="f-title">Título *</label>
+      <input id="f-title" type="text" placeholder="Nombre del sitio" autocomplete="off" />
+    </div>
+    <div class="form-group">
+      <label for="f-desc">Descripción</label>
+      <textarea id="f-desc" placeholder="Descripción breve (opcional)…"></textarea>
+    </div>
+    <div class="form-group">
+      <label for="f-tags">Etiquetas</label>
+      <input id="f-tags" type="text" placeholder="dev, tools, docs" autocomplete="off" />
+      <p class="field-hint">Separadas por coma</p>
+    </div>
+    <div class="modal-actions">
+      <button type="button" class="btn btn-secondary" id="cancel-btn">Cancelar</button>
+      <button type="submit" class="btn btn-primary">Guardar</button>
+    </div>
+  </form>
+</div>
+
+<div id="toast"></div>
+
+<script>
+// ─── Marcadores por defecto ───────────────────────────────────────────────────
+// Se cargan sólo la primera vez (cuando localStorage está vacío).
+// Puedes editarlos, agregar más o eliminarlos desde la interfaz.
+const DEFAULTS = [
+  { title: "GitHub",            url: "https://github.com",              desc: "Plataforma de desarrollo colaborativo y control de versiones.", tags: ["dev","git"] },
+  { title: "Cloudflare",        url: "https://dash.cloudflare.com",     desc: "Panel de control: DNS, Pages, Access y más.",                   tags: ["infra","cloudflare"] },
+  { title: "MDN Web Docs",      url: "https://developer.mozilla.org",   desc: "Referencia completa de HTML, CSS y JavaScript.",                tags: ["dev","docs"] },
+  { title: "Hacker News",       url: "https://news.ycombinator.com",    desc: "Noticias sobre tecnología, startups y programación.",           tags: ["noticias"] },
+  { title: "Excalidraw",        url: "https://excalidraw.com",          desc: "Diagramas con estilo de pizarra.",                              tags: ["diseño","tools"] },
+  { title: "Tailwind CSS",      url: "https://tailwindcss.com",         desc: "Framework CSS de utilidades para diseño rápido.",               tags: ["dev","css"] },
+  { title: "Ray.so",            url: "https://ray.so",                  desc: "Genera imágenes bonitas de fragmentos de código.",              tags: ["tools","dev"] },
+];
+
+const STORAGE_KEY = "bookmarks_v1";
+
+// ─── Utilidades ───────────────────────────────────────────────────────────────
+const uid  = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+const host = url => { try { return new URL(url).hostname; } catch { return url; } };
+const favicon = url => `https://www.google.com/s2/favicons?domain=${host(url)}&sz=32`;
+
+// ─── Estado ───────────────────────────────────────────────────────────────────
+let bookmarks = [];
+let editingId = null;
+
+function loadBookmarks() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) return JSON.parse(raw);
+  } catch {}
+  return DEFAULTS.map(b => ({ ...b, id: uid() }));
+}
+
+function save() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(bookmarks));
+}
+
+// ─── DOM refs ─────────────────────────────────────────────────────────────────
+const grid      = document.getElementById("grid");
+const input     = document.getElementById("search");
+const countEl   = document.getElementById("count");
+const emptyEl   = document.getElementById("empty");
+const emptyMsg  = document.getElementById("empty-msg");
+const overlay   = document.getElementById("overlay");
+const modal     = document.getElementById("modal");
+const modalTitleEl = document.getElementById("modal-title");
+const form      = document.getElementById("bookmark-form");
+const fUrl      = document.getElementById("f-url");
+const fTitle    = document.getElementById("f-title");
+const fDesc     = document.getElementById("f-desc");
+const fTags     = document.getElementById("f-tags");
+const toastEl   = document.getElementById("toast");
+
+// ─── Toast ────────────────────────────────────────────────────────────────────
+let toastTimer;
+function toast(msg) {
+  toastEl.textContent = msg;
+  toastEl.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toastEl.classList.remove("show"), 2400);
+}
+
+// ─── Render ───────────────────────────────────────────────────────────────────
+function buildCard(bm) {
+  const card = document.createElement("div");
+  card.className = "card";
+  card.dataset.id = bm.id;
+  card.dataset.search = [bm.title, bm.desc || "", ...(bm.tags || [])].join(" ").toLowerCase();
+
+  // Link area
+  const link = document.createElement("a");
+  link.className = "card-link";
+  link.href = bm.url;
+  link.target = "_blank";
+  link.rel = "noopener noreferrer";
+
+  const top = document.createElement("div");
+  top.className = "card-top";
+
+  const img = document.createElement("img");
+  img.className = "favicon";
+  img.src = favicon(bm.url);
+  img.alt = "";
+  img.loading = "lazy";
+  img.onerror = () => { img.style.display = "none"; };
+
+  const titleEl = document.createElement("span");
+  titleEl.className = "card-title";
+  titleEl.textContent = bm.title;
+
+  top.append(img, titleEl);
+  link.appendChild(top);
+
+  if (bm.desc) {
+    const desc = document.createElement("p");
+    desc.className = "card-desc";
+    desc.textContent = bm.desc;
+    link.appendChild(desc);
+  }
+
+  const urlEl = document.createElement("span");
+  urlEl.className = "card-url";
+  urlEl.textContent = host(bm.url);
+  link.appendChild(urlEl);
+
+  if (bm.tags && bm.tags.length) {
+    const tags = document.createElement("div");
+    tags.className = "tags";
+    bm.tags.forEach(t => {
+      const span = document.createElement("span");
+      span.className = "tag";
+      span.textContent = t;
+      tags.appendChild(span);
+    });
+    link.appendChild(tags);
+  }
+
+  card.appendChild(link);
+
+  // Action buttons
+  const actions = document.createElement("div");
+  actions.className = "card-actions";
+
+  const editBtn = document.createElement("button");
+  editBtn.className = "card-btn";
+  editBtn.title = "Editar";
+  editBtn.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>`;
+  editBtn.addEventListener("click", e => { e.preventDefault(); openEdit(bm.id); });
+
+  const delBtn = document.createElement("button");
+  delBtn.className = "card-btn del";
+  delBtn.title = "Eliminar";
+  delBtn.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6M9 6V4h6v2"/></svg>`;
+  delBtn.addEventListener("click", e => { e.preventDefault(); deleteBookmark(bm.id); });
+
+  actions.append(editBtn, delBtn);
+  card.appendChild(actions);
+
+  return card;
+}
+
+function render() {
+  grid.innerHTML = "";
+  const q = input.value.trim().toLowerCase();
+  let visible = 0;
+
+  bookmarks.forEach(bm => {
+    const card = buildCard(bm);
+    const matches = !q || card.dataset.search.includes(q);
+    if (!matches) card.style.display = "none";
+    else visible++;
+    grid.appendChild(card);
+  });
+
+  const total = bookmarks.length;
+  countEl.textContent = total === 0 ? "" : visible === total
+    ? `${total} marcador${total !== 1 ? "es" : ""}`
+    : `${visible} de ${total} marcadores`;
+
+  if (total === 0) {
+    emptyMsg.innerHTML = `No hay marcadores todavía.<br>Usa el botón <strong>Agregar</strong> para empezar.`;
+    emptyEl.style.display = "block";
+  } else if (visible === 0 && q) {
+    emptyMsg.textContent = `Sin resultados para "${input.value.trim()}"`;
+    emptyEl.style.display = "block";
+  } else {
+    emptyEl.style.display = "none";
+  }
+}
+
+// ─── CRUD ─────────────────────────────────────────────────────────────────────
+function deleteBookmark(id) {
+  if (!confirm("¿Eliminar este marcador?")) return;
+  bookmarks = bookmarks.filter(b => b.id !== id);
+  save();
+  render();
+  toast("Marcador eliminado");
+}
+
+// ─── Modal ────────────────────────────────────────────────────────────────────
+function openAdd() {
+  editingId = null;
+  modalTitleEl.textContent = "Agregar marcador";
+  form.reset();
+  showModal();
+  fUrl.focus();
+}
+
+function openEdit(id) {
+  const bm = bookmarks.find(b => b.id === id);
+  if (!bm) return;
+  editingId = id;
+  modalTitleEl.textContent = "Editar marcador";
+  fUrl.value   = bm.url;
+  fTitle.value = bm.title;
+  fDesc.value  = bm.desc || "";
+  fTags.value  = (bm.tags || []).join(", ");
+  showModal();
+  fTitle.focus();
+}
+
+function showModal() {
+  modal.classList.remove("hidden");
+  overlay.classList.remove("hidden");
+  document.body.style.overflow = "hidden";
+}
+
+function closeModal() {
+  modal.classList.add("hidden");
+  overlay.classList.add("hidden");
+  document.body.style.overflow = "";
+  editingId = null;
+}
+
+// Auto-fill title from hostname when URL field loses focus
+fUrl.addEventListener("blur", () => {
+  if (fTitle.value || !fUrl.value) return;
+  try {
+    const h = new URL(fUrl.value).hostname.replace(/^www\./, "");
+    fTitle.value = h.charAt(0).toUpperCase() + h.slice(1);
+  } catch {}
+});
+
+form.addEventListener("submit", e => {
+  e.preventDefault();
+  const url   = fUrl.value.trim();
+  const title = fTitle.value.trim();
+  if (!url || !title) {
+    if (!url)   fUrl.focus();
+    else        fTitle.focus();
+    return;
+  }
+
+  // Basic URL validation
+  try { new URL(url); } catch {
+    fUrl.setCustomValidity("URL inválida");
+    fUrl.reportValidity();
+    return;
+  }
+  fUrl.setCustomValidity("");
+
+  const tags = fTags.value.split(",").map(t => t.trim()).filter(Boolean);
+  const desc = fDesc.value.trim();
+
+  if (editingId) {
+    const idx = bookmarks.findIndex(b => b.id === editingId);
+    if (idx !== -1) bookmarks[idx] = { ...bookmarks[idx], url, title, desc, tags };
+    toast("Marcador actualizado");
+  } else {
+    bookmarks.unshift({ id: uid(), url, title, desc, tags });
+    toast("Marcador agregado");
+  }
+
+  save();
+  closeModal();
+  render();
+});
+
+// ─── Export / Import ─────────────────────────────────────────────────────────
+document.getElementById("export-btn").addEventListener("click", () => {
+  const blob = new Blob([JSON.stringify(bookmarks, null, 2)], { type: "application/json" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = `marcadores-${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+  URL.revokeObjectURL(a.href);
+  toast("JSON exportado");
+});
+
+document.getElementById("import-file").addEventListener("change", e => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    try {
+      const data = JSON.parse(ev.target.result);
+      if (!Array.isArray(data)) throw new Error();
+      const existingUrls = new Set(bookmarks.map(b => b.url));
+      const incoming = data
+        .filter(b => b.url && b.title)
+        .map(b => ({ ...b, id: b.id || uid() }))
+        .filter(b => !existingUrls.has(b.url));
+      bookmarks = [...incoming, ...bookmarks];
+      save();
+      render();
+      toast(`${incoming.length} marcador${incoming.length !== 1 ? "es" : ""} importado${incoming.length !== 1 ? "s" : ""}`);
+    } catch {
+      alert("Archivo inválido. Asegúrate de importar un JSON exportado desde esta app.");
+    }
+    e.target.value = "";
+  };
+  reader.readAsText(file);
+});
+
+// ─── Event listeners ─────────────────────────────────────────────────────────
+document.getElementById("add-btn").addEventListener("click", openAdd);
+document.getElementById("modal-close").addEventListener("click", closeModal);
+document.getElementById("cancel-btn").addEventListener("click", closeModal);
+overlay.addEventListener("click", closeModal);
+input.addEventListener("input", render);
+
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape" && !modal.classList.contains("hidden")) {
+    closeModal();
+    return;
+  }
+  if (e.key === "/" && modal.classList.contains("hidden") && document.activeElement !== input && document.activeElement.tagName !== "INPUT" && document.activeElement.tagName !== "TEXTAREA") {
+    e.preventDefault();
+    input.focus();
+    input.select();
+  }
+});
+
+// ─── Init ─────────────────────────────────────────────────────────────────────
+bookmarks = loadBookmarks();
+if (!localStorage.getItem(STORAGE_KEY)) save();
+render();
+input.focus();
+</script>
+</body>
+</html>
